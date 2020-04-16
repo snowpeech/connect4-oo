@@ -13,18 +13,14 @@ class Game {
       (this.board = []),
       (this.currPlayer = p1);
     this.makeBoard(), this.makeHtmlBoard();
-    console.log("p1", p1, "p2", p2);
   }
 
   makeBoard() {
     let { height, width, board } = this;
-    // console.log("H", height, "W", width, board);
 
     for (let y = 0; y < height; y++) {
       board.push(Array.from({ length: width }));
-      // console.log(y);
     }
-    console.log("made board");
   }
 
   makeHtmlBoard() {
@@ -55,7 +51,6 @@ class Game {
 
       board.append(row);
     }
-    console.log("made htmlboard");
   }
 
   findSpotForCol(x) {
@@ -70,16 +65,14 @@ class Game {
   placeInTable(y, x) {
     const piece = document.createElement("div");
     piece.classList.add("piece");
-    console.log("color", this.currPlayer.color);
     piece.style.backgroundColor = this.currPlayer.color;
     piece.style.top = -50 * (y + 2);
-    console.log("piece", piece);
+
     const spot = document.getElementById(`${y}-${x}`);
     spot.append(piece);
   }
 
   endGame(msg) {
-    console.log("game ended");
     const top = document.querySelector("#column-top");
     top.removeEventListener("click", this.handleClick);
     setTimeout(function () {
@@ -89,7 +82,7 @@ class Game {
 
   handleClick = (evt) => {
     // get x from ID of clicked cell
-    console.log("click");
+
     let { board, currPlayer } = this;
     const x = +evt.target.id;
 
@@ -115,8 +108,6 @@ class Game {
 
     // switch players
     this.currPlayer = this.currPlayer == p1 ? p2 : p1;
-    // currPlayer === 1 ? (currPlayer = 2) : (currPlayer = 1);
-    console.log("Switch player", board, currPlayer);
   };
 
   checkForWin() {
