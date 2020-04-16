@@ -174,5 +174,5 @@ class Player {
 document.querySelector("#colorForm").addEventListener("click", function () {
   p1 = new Player(document.querySelector("#p1").value);
   p2 = new Player(document.querySelector("#p2").value);
-  new Game(p1, p2, 3, 4);
+  new Game(p1, p2);
 });
