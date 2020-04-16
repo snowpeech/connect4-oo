@@ -10,7 +10,19 @@ class Game {
       (this.width = width),
       (this.board = []),
       (this.currPlayer = 1);
+    this.makeNewGamebtn(), this.makeBoard(), this.makeHtmlBoard();
   }
+
+  makeNewGamebtn() {
+    let heading = document.querySelector("#heading");
+    let btn = document.createElement("button");
+    btn.innerText = "Start New Game";
+    btn.addEventListener("click", () => {
+      window.location.reload();
+    });
+    heading.append(btn);
+  }
+
   makeBoard() {
     let { height, width, board } = this;
     // console.log("H", height, "W", width, board);
@@ -71,12 +83,16 @@ class Game {
   }
 
   endGame(msg) {
-    alert(msg);
+    const top = document.querySelector("#column-top");
+    top.removeEventListener("click", this.handleClick);
+    setTimeout(function () {
+      alert(`${msg}`);
+    }, 100);
   }
 
   handleClick = (evt) => {
     // get x from ID of clicked cell
-    const { board, currPlayer } = this;
+    let { board, currPlayer } = this;
     const x = +evt.target.id;
 
     // get next spot in column (if none, ignore click)
@@ -100,9 +116,8 @@ class Game {
     }
 
     // switch players
-    currPlayer = currPlayer === 1 ? 2 : 1;
+    this.currPlayer = this.currPlayer === 1 ? 2 : 1;
     // currPlayer === 1 ? (currPlayer = 2) : (currPlayer = 1);
-    
   };
 
   checkForWin() {
@@ -160,30 +175,4 @@ class Game {
   }
 }
 
-// const WIDTH = 7;
-// const HEIGHT = 6;
-
-// let currPlayer = 1; // active player: 1 or 2
-// let board = []; // array of rows, each row is array of cells  (board[y][x])
-
-/** makeBoard: create in-JS board structure:
- *   board = array of rows, each row is array of cells  (board[y][x])
- */
-
-/** makeHtmlBoard: make HTML table and row of column tops. */
-
-/** findSpotForCol: given column x, return top empty y (null if filled) */
-
-/** placeInTable: update DOM to place piece into HTML table of board */
-
-/** endGame: announce game end */
-
-/** handleClick: handle click of column top to play piece */
-
-/** checkForWin: check board cell-by-cell for "does a win start here?" */
-
-// makeBoard();
-// makeHtmlBoard();
-let a2 = new Game(3, 4);
-a2.makeBoard();
-a2.makeHtmlBoard();
+new Game(5, 6);
