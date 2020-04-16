@@ -5,22 +5,15 @@
  * board fills (tie)
  */
 class Game {
-  constructor(height = 6, width = 7) {
-    (this.height = height),
+  constructor(p1, p2, height = 6, width = 7) {
+    this.p1 = p1;
+    (this.p2 = p2),
+      (this.height = height),
       (this.width = width),
       (this.board = []),
-      (this.currPlayer = 1);
-    this.makeNewGamebtn(), this.makeBoard(), this.makeHtmlBoard();
-  }
-
-  makeNewGamebtn() {
-    let heading = document.querySelector("#heading");
-    let btn = document.createElement("button");
-    btn.innerText = "Start New Game";
-    btn.addEventListener("click", () => {
-      window.location.reload();
-    });
-    heading.append(btn);
+      (this.currPlayer = p1);
+    this.makeBoard(), this.makeHtmlBoard();
+    console.log("p1", p1, "p2", p2);
   }
 
   makeBoard() {
@@ -31,11 +24,12 @@ class Game {
       board.push(Array.from({ length: width }));
       // console.log(y);
     }
+    console.log("made board");
   }
 
   makeHtmlBoard() {
     const board = document.getElementById("board");
-
+    board.innerHTML = "";
     // make column tops (clickable area for adding a piece to that column)
     const top = document.createElement("tr");
     top.setAttribute("id", "column-top");
@@ -61,6 +55,7 @@ class Game {
 
       board.append(row);
     }
+    console.log("made htmlboard");
   }
 
   findSpotForCol(x) {
@@ -75,14 +70,16 @@ class Game {
   placeInTable(y, x) {
     const piece = document.createElement("div");
     piece.classList.add("piece");
-    piece.classList.add(`p${this.currPlayer}`);
+    console.log("color", this.currPlayer.color);
+    piece.style.backgroundColor = this.currPlayer.color;
     piece.style.top = -50 * (y + 2);
-
+    console.log("piece", piece);
     const spot = document.getElementById(`${y}-${x}`);
     spot.append(piece);
   }
 
   endGame(msg) {
+    console.log("game ended");
     const top = document.querySelector("#column-top");
     top.removeEventListener("click", this.handleClick);
     setTimeout(function () {
@@ -92,6 +89,7 @@ class Game {
 
   handleClick = (evt) => {
     // get x from ID of clicked cell
+    console.log("click");
     let { board, currPlayer } = this;
     const x = +evt.target.id;
 
@@ -107,7 +105,7 @@ class Game {
 
     // check for win
     if (this.checkForWin()) {
-      return this.endGame(`Player ${currPlayer} won!`);
+      return this.endGame(`Player ${currPlayer.color} won!`);
     }
 
     // check for tie
@@ -116,8 +114,9 @@ class Game {
     }
 
     // switch players
-    this.currPlayer = this.currPlayer === 1 ? 2 : 1;
+    this.currPlayer = this.currPlayer == p1 ? p2 : p1;
     // currPlayer === 1 ? (currPlayer = 2) : (currPlayer = 1);
+    console.log("Switch player", board, currPlayer);
   };
 
   checkForWin() {
@@ -175,4 +174,14 @@ class Game {
   }
 }
 
-new Game(5, 6);
+class Player {
+  constructor(color) {
+    this.color = color;
+  }
+}
+
+document.querySelector("#colorForm").addEventListener("click", function () {
+  p1 = new Player(document.querySelector("#p1").value);
+  p2 = new Player(document.querySelector("#p2").value);
+  new Game(p1, p2, 3, 4);
+});
